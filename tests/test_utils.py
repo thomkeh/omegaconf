@@ -224,6 +224,18 @@ def test_is_dataclass(mocker: Any) -> None:
     assert not _utils.is_dataclass(10)
 
 
+def test_resolve_types() -> None:
+    # simulate `from __future__ import annotations` by using strings for the types
+    @dataclass
+    class Foo:
+        a: "int" = "2"  # type: ignore
+        b: "float" = "0.0"  # type: ignore
+        c: "str" = 2  # type: ignore
+
+    assert _utils.get_structured_config_data(Foo) == {"a": 2, "b": 0.0, "c": "2"}
+    assert _utils.get_structured_config_data(Foo()) == {"a": 2, "b": 0.0, "c": "2"}
+
+
 def test_is_attr_class(mocker: Any) -> None:
     @attr.s
     class Foo:
