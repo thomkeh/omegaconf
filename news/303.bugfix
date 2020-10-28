@@ -1,0 +1,1 @@
+Fix type error that occurs when using postponed evaluation of annotations
